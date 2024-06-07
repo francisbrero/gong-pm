@@ -5,4 +5,4 @@ chromadb
 python-dotenv
 sentence-transformers
 tqdm
-pysqlite3
+pysqlite3-binary
