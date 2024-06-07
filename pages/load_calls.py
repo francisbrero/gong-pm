@@ -1,5 +1,6 @@
 import streamlit as st
 from utils.utils import get_recent_calls, save_transcript_to_file
+from utils.load_calls import read_loaded_call_ids
 from utils.chroma_db import embed_and_store_transcripts, reset_collection, init_chromadb, get_collection
 from datetime import datetime, timedelta
 import os
@@ -24,6 +25,9 @@ if st.button("Load Calls"):
     with st.spinner("Loading calls..."):
         total_chunks = days_to_load // CHUNK_SIZE
         progress_bar = st.progress(0)
+        
+        # Read already loaded call IDs
+        loaded_call_ids = read_loaded_call_ids(collection)
 
         for i in range(total_chunks):
             from_days_ago = (i + 1) * CHUNK_SIZE
@@ -33,7 +37,7 @@ if st.button("Load Calls"):
             new_call_ids = []
             for call in calls:
                 call_id = call['id']
-                if call_id not in [c['call_id'] for c in collection]:
+                if call_id not in loaded_call_ids:
                     save_transcript_to_file(call_id)
                     new_call_ids.append(call_id)
 
