@@ -1,49 +1,41 @@
 import streamlit as st
-from datetime import datetime, timedelta
-from utils.utils import get_recent_calls, save_transcript_to_file
-from utils.chroma_db import embed_and_store_transcripts, query_chromadb, init_chromadb, get_collection
-import os
 
-# Constants
-TRANSCRIPTS_PATH = 'data/transcripts'
-CHROMA_PATH = './data/chroma'
-COLLECTION_NAME = 'call_transcripts'
-CHUNK_SIZE = 3
-DAYS_TO_LOAD = 30
-GONG_BASE_URL = os.getenv("GONG_BASE_URL")
-# Replace API by APP in the Gong URL
-GONG_BASE_APP_URL = GONG_BASE_URL.replace("api", "app")
 
-# Initialize ChromaDB client and collection
-client = init_chromadb(chroma_root_path=CHROMA_PATH)
-collection = get_collection(client, collection_name=COLLECTION_NAME)
+st.set_page_config(
+    page_title="Gong Calls",
+    page_icon="📞",
+    layout="wide",
+)
 
-# Sidebar - Project Information
-st.sidebar.header("Project Information")
-st.sidebar.write("""
-This project allows you to search through Gong call transcripts. The transcripts are embedded and stored in a ChromaDB collection. You can query the database to find relevant segments from the calls.
+with st.sidebar:
+    st.markdown("# Howdy fellow human 🤠")
 
-To use the app, enter a search query in the text input below and view the results, which include a link to the relevant part of the call.
-""")
+    st.markdown(
+        """
+        Instructions: 
+        1. Query calls
+        2. Ask Gong questions to better your knowledge of our customers
+        3. Enter `can you write me a follow up email for this conversation?`
+        4. If you think we're missing calls, go to Load Calls
+        5. Profit 🤑
+    """)
 
-# Main Area - Search and Query
-st.header("Gong Calls Query")
+    st.divider()
 
-query_text = st.text_input("Enter your query:")
-if query_text:
-    results = query_chromadb(query_text, chroma_root_path=CHROMA_PATH, collection_name=COLLECTION_NAME)
-    st.write("Query Results:")
+    st.markdown("Made with ❤️ by the people at [MadKudu](https://madkudu.com)")
+
+
+    with st.expander('Source'):
+        source = """
+        [Github Repo](https://github.com/francisbrero/gong-pm)
+        """
+        st.markdown(source, unsafe_allow_html=True)
+
+    disclaimer = '<p style="font-size: 10px;">This LLM can make mistakes. Consider checking important information.</p>'
+    st.markdown(disclaimer, unsafe_allow_html=True)
     
-    for i, metadata in enumerate(results['metadatas'][0]):
-        call_id = metadata['call_id']
-        start = metadata['start']
-        # change start from milliseconds to seconds
-        start = start // 1000
-        speaker_name = metadata['speaker_name']
-        sentence = results['documents'][0][i]
-        call_link = f"{GONG_BASE_APP_URL}/call?id={call_id}&play={start}"
-        
-        st.write(f"**Speaker:** {speaker_name}")
-        st.write(f"**Sentence:** {sentence}")
-        st.write(f"[Listen to Call]({call_link})")
-        st.write("---") 
+    page = st.sidebar.radio("Go to", ["Query Calls", "Load Calls"])
+    if page == "Query Calls":
+        import pages.query_calls
+    elif page == "Load Calls":
+        import pages.load_calls
