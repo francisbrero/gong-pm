@@ -1,0 +1,7 @@
+toml
+streamlit
+requests
+chromadb
+python-dotenv
+sentence-transformers
+tqdm
