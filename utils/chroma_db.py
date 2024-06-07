@@ -4,6 +4,10 @@ import logging
 import os
 import json
 from utils.embedding_model import generate_embeddings
+__import__('pysqlite3')
+import sys
+
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 # Initialize ChromaDB client
 def init_chromadb(chroma_root_path="./data/chroma"):
