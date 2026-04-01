@@ -62,12 +62,13 @@ python -m test.test_transcripts
 3. Test running a query against the chroma db
 
 ```bash
-python -m test.test_query --query "What did the customer say about our pricing?"
+python -m test.test_query --query "who expressed interest in our Apollo integration?"
 ```
+
 4. Test against production data
 
 ```bash
-python -m test.test_query --query "what did the customer say about pricing?" --chroma_path "./data/chroma" --collection_name "call_transcripts"
+python -m test.test_query --query "who expressed interest in our Apollo integration?" --chroma_path "./data/chroma" --collection_name "call_transcripts"
 ```
 
 ## Architecture

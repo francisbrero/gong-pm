@@ -9,7 +9,7 @@ from utils.chroma_db import init_chromadb, reset_collection, embed_and_store_tra
 TRANSCRIPTS_PATH = 'data/transcripts'
 CHROMA_PATH = './data/chroma'
 COLLECTION_NAME = 'call_transcripts'
-DAYS_TO_LOAD = 30
+DAYS_TO_LOAD = 10
 CHUNK_SIZE = 3
 
 # Set up logging
