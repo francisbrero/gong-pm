@@ -1,13 +1,17 @@
 import streamlit as st
 from utils.chroma_db import query_chromadb, init_chromadb, get_collection
 import os
+from dotenv import load_dotenv
 
 # Constants
 CHROMA_PATH = './data/chroma'
 COLLECTION_NAME = 'call_transcripts'
-GONG_BASE_URL = os.getenv("GONG_BASE_URL")
+
+# Load environment variables from .env file
+load_dotenv()
+gong_base_url = os.getenv("GONG_BASE_URL")
 # Replace API by APP in the Gong URL
-GONG_BASE_APP_URL = GONG_BASE_URL.replace("api", "app")
+GONG_BASE_APP_URL = gong_base_url.replace("api", "app")
 
 # Initialize ChromaDB client and collection
 client = init_chromadb(chroma_root_path=CHROMA_PATH)
